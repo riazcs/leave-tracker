@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Leave extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'reason',
+        'user_id',
+        'start_date',
+        'end_date',
+        'status',
+        'type',
+    ];
+    public function user(){
+        return $this->belongsTo(User::class,'user_id');
+    }
 }

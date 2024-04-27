@@ -17,12 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('contact')->nullable();
-            $table->string('company')->nullable();
-            $table->unsignedInteger('country_id')->nullable();
             $table->string('role')->nullable();
-            $table->string('plane')->nullable();
-            $table->boolean('trial_used')->default(false);
             $table->boolean('status')->default(true);
             $table->rememberToken();
             $table->timestamps();

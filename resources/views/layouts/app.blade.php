@@ -63,7 +63,7 @@
     <script src="../../demo/assets/vendor/js/helpers.js"></script>
     <script src="../../demo/assets/js/config.js"></script>
 
-   
+
 
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
     <script>
@@ -98,7 +98,7 @@
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                         <div class="navbar-nav align-items-center">
                             <div class="nav-item d-flex align-items-center">
-                                <i class="bx bx-search fs-4 lh-0"></i> 
+                                <i class="bx bx-search fs-4 lh-0"></i>
                                 <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2" placeholder="Search..." aria-label="Search...">
                             </div>
                         </div>
@@ -142,8 +142,8 @@
                                             <span class="align-middle">My Profile</span>
                                         </a>
                                     </li>
-                                    
-                                   
+
+
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
@@ -245,8 +245,17 @@
                             "_token": "{{ csrf_token() }}",
                         },
                         success: function(data) {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: "Deleted successfully.",
+                                showConfirmButton: false,
+                                timer: 2000,
+                                width: 400,
+                                height: 50,
+                            })
                             window.location.reload();
-                            console.log(data);
+
                         },
                         error: function(error) {
                             console.log(error);

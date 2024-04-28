@@ -26,16 +26,11 @@ class LeaveController extends Controller
         return view('leaves.index', compact('leaves'));
     }
 
-
-    public function create()
-    {
-    }
-
-
     public function store(StoreLeaveRequest $request)
     {
         $data = $request->validated();
         $data['status'] = array_search(StatusEnum::PENDING, StatusEnum::statuses);
+        $data['user_id'] = auth()->user()->id;
         $leave = $this->leaveService->createLeave($data);
         return back()->with('success', 'added')->withInput();
     }
@@ -52,32 +47,32 @@ class LeaveController extends Controller
         return view('leaves.edit', compact('leave'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateLeaveRequest $request, Leave $leave)
+    public function update(UpdateLeaveRequest $request, Leave $leave, $id)
     {
-        $leave->update($request->validated());
+        $data = $request->validated();
+        $data['status'] = array_search(StatusEnum::PENDING, StatusEnum::statuses);
+        $data['user_id'] = auth()->user()->id;
+        $this->leaveService->updateLeave($id, $data);
         return back()->with('success', 'update')->withInput();
     }
 
-    public function destroy(Leave $leave)
+    public function destroy(Leave $leave, $id)
     {
-        $leave->delete();
-        return back()->with('success', 'delete')->withInput();
+        $this->leaveService->deleteLeave($id);
+        return response()->json(['message' => 'Leave deleted successfully']);
     }
 
     public function updateLeaveStatus(Request $request)
     {
-        $leave = Leave::find($request->id);
+        $leave = Leave::with('user')->find($request->id);
         $leave->status = $request->status;
         $leave->comment = $request->comment;
         $leave->save();
         $data = [
-            'email' => 'recipient@example.com',
-            'message' => 'Your notification message here.'
+            'email' => $leave->user->email,
+            'status' => StatusEnum::statuses[$request->status]
         ];
-        
+
         event(new LeaveNotificationEvent($data));
         return back()->with('success', 'status_update')->withInput();
     }

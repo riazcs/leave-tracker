@@ -14,11 +14,6 @@ class UserController extends Controller
     public function index()
     {
         $users = User::get();
-        foreach ($users as $user) {
-            $creditAmount = Account::where('user_id', $user->id)->sum('credit');
-            $debitAmount = Account::where('user_id', $user->id)->sum('debit');
-            $user->total_balance =  $creditAmount - $debitAmount;
-        }
         return view('users.blade.php', compact('users'));
     }
 
@@ -42,7 +37,6 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'contact' => $request->userContact,
                 'role' => $request->role,
                 'status' => $request->status,
             ]);
@@ -105,7 +99,15 @@ class UserController extends Controller
 
     public function userManage()
     {
-        $users = User::get();
+        $users = User::whereNot('id', auth()->user()->id)->get();
         return view('user_manage.users', compact('users'));
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->status = $request->status;
+        $user->save();
+        return redirect('user/manage')->with('success', "User status updated successfully");
     }
 }

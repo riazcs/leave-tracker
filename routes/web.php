@@ -25,6 +25,7 @@ Route::group(['middleware' => ['role:admin'], 'auth'], function () {
     Route::resource('users', UserController::class);
     Route::get('users', [UserController::class, 'destroy'])->name('users.suspend');
     Route::post('update-leave-status', [LeaveController::class, 'updateLeaveStatus'])->name('update.leaveStatus');
+    Route::post('update-user-status', [UserController::class, 'updateStatus'])->name('update.userStatus');
 
 });
 

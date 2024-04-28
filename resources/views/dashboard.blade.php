@@ -117,9 +117,11 @@
                         <tr>
                             <th>SL No</th>
                             <th>Status</th>
+                            <th>Type</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Reason</th>
+                            <th>Comment</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -134,10 +136,20 @@
                                     @else
                                     <span class="badge bg-success">{{ \App\Enums\StatusEnum::statuses[$leave->status] }}</span>
                                     @endif
-                                    @endif</span></td>
+                                    @endif</span>
+                            </td>
+                            <td>@if($leave->type)
+                                @if ($leave->type == array_search(\App\Enums\LeaveType::SICK, \App\Enums\LeaveType::types))
+                                <span class="badge bg-info">{{ \App\Enums\LeaveType::types[$leave->type] }}</span>
+                                @else
+                                <span class="badge bg-success">{{ \App\Enums\LeaveType::types[$leave->type] }}</span>
+                                @endif
+                                @endif
+                            </td>
                             <td><span>{{$leave->start_date}}</span></td>
                             <td><span>{{$leave->end_date}}</span></td>
                             <td><span>{{$leave->reason}}</span></td>
+                            <td><span>{{$leave->comment}}</span></td>
                             <td>
                                 <div class="row">
                                     <div class="col-4">
@@ -146,10 +158,10 @@
                                         <button class="btn btn-sm btn-icon edit-record" data-id="{{ $leave->id }}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditLeave{{ $leave->id }}"><i class="bx bx-edit"></i></button>
                                     </div>
                                     <div class="col-4">
-                                        <button class="btn btn-sm btn-icon delete-record" type="button"><i class="bx bx-trash"></i></button>
+                                        <button class="btn btn-sm btn-icon delete-record" type="button" onclick="deleteItem('/leaves', {{ $leave->id }})"><i class="bx bx-trash"></i></button>
                                     </div>
-
                                 </div>
+                            </td>
                         </tr>
                         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditLeave{{ $leave->id }}">
                             <div class="offcanvas-header">
@@ -163,11 +175,11 @@
                                     <div class="mb-3">
                                         <label class="form-label" for="add-user-start-date">Start Date</label>
                                         <input type="hidden" class="form-control" placeholder="Start date" name="user_id" value="{{auth()->user()->id}}" />
-                                        <input type="datetime-local" class="form-control" placeholder="Start date" name="start_date" aria-label="Start date" value="{{ $leave->start_date }}" />
+                                        <input type="date" class="form-control" placeholder="Start date" name="start_date" aria-label="Start date" value="{{ \Carbon\Carbon::parse($leave->start_date)->format('Y-m-d') }}" />
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label" for="add-user-end_date">End Date</label>
-                                        <input type="datetime-local" class="form-control" placeholder="End date" name="end_date" aria-label="End date" value="{{ $leave->end_date }}" />
+                                        <input type="date" class="form-control" placeholder="End date" name="end_date" aria-label="End date" value="{{ \Carbon\Carbon::parse($leave->end_date)->format('Y-m-d') }}" />
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label" for="add-user-reason">Reason</label>

@@ -47,8 +47,11 @@ class AuthenticatedSessionController extends Controller
             'password' => 'required',
         ]);
         $credentials = $request->only('email', 'password');
+        $user = User::where('email', $request->email)->isApproved()->first();
+        if (!$user) {
+            return redirect("login")->withErrors('Oppes! You have not entered. Wait for approve');;
+        } 
         if (Auth::attempt($credentials)) {
-            $users = User::all();
             return redirect()->intended('dashboard')
                 ->withSuccess('You have Successfully logged in');
         }

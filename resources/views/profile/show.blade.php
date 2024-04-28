@@ -38,6 +38,7 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Reason</th>
+                            <th>Comment</th>
                             <th>Leave Status</th>
                             <th>Actions</th>
                         </tr>
@@ -51,8 +52,9 @@
                             <td><span>{{$leave->start_date}}</span></td>
                             <td><span>{{$leave->end_date}}</span></td>
                             <td><span>{{$leave->reason}}</span></td>
+                            <td><span>{{$leave->comment}}</span></td>
                             <td><span>@if($leave->status)
-                                    @if ($leave->status == array_search(\App\Enums\StatusEnum::PENDING, \App\Enums\StatusEnum::statuses))
+                                    @if ($leave->status == array_search(\App\Enums\StatusEnum::REJECTED, \App\Enums\StatusEnum::statuses))
                                     <span class="badge bg-danger">{{ \App\Enums\StatusEnum::statuses[$leave->status] }}</span>
                                     @else
                                     <span class="badge bg-success">{{ \App\Enums\StatusEnum::statuses[$leave->status] }}</span>

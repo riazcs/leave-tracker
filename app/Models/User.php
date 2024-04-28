@@ -42,4 +42,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function leave(){
         return $this->belongsTo(Leave::class);
     }
+
+    public function scopeIsApproved($query){
+        return $query->where('status', 1);
+    }
 }

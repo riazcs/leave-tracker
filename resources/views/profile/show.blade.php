@@ -13,9 +13,9 @@
             </ul>
         </div>
         @endif
-        @if(session('success') == 'balance_add')
+        @if(session('success') == 'status_update')
         <div class="alert alert-success">
-            Balance added successfully!
+            Leave status updated successfully!
         </div>
         @endif
 
@@ -73,7 +73,7 @@
                         </tr>
                         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasUpdaeStatus{{ $leave->id }}">
                             <div class="offcanvas-header">
-                                <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Add Balance</h5>
+                                <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Leave Status Update</h5>
                                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                             </div>
                             <div class="offcanvas-body mx-0 flex-grow-0">
@@ -82,15 +82,18 @@
                                     <div class="mb-3">
                                         <label class="form-label" for="add-user-contact"> Select Status</label>
                                         <input name="id" value="{{$leave->id }}" type="hidden" />
-                                        <input name="user_id" value="{{$leave->user->id }}" type="hidden" />
-                                        <select class="form-control" class="form-select" name="status">
-                                            <option value="" selected disabled> --Select--</option>
-                                            @foreach(App\Enums\StatusEnum::statuses as $key=>$status)
-                                            <option value="{{ $key }}">{{$status}}</option>
+                                        <input name="user_id" value="{{$leave->user->id }}" type="hidden" />                                  
+                                        <select class="form-control form-select" name="status">
+                                            <option value="" disabled> --Select--</option>
+                                            @foreach(App\Enums\StatusEnum::statuses as $key => $status)
+                                            <option value="{{ $key }}" @if($key==$leave->status) selected @endif>{{ $status }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-
+                                    <div class="mb-3">
+                                        <label class="form-label" for="add-user-reason">Comment</label>
+                                        <textarea type="text" rows="4" name="comment" class="form-control" placeholder="Comment" aria-label="reason"></textarea>
+                                    </div>
                                     <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit" id="saveBalance">Submit</button>
                                     <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
                                 </form>

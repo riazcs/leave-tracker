@@ -8,6 +8,7 @@ use App\Events\LeaveNotificationEvent;
 use App\Http\Requests\StoreLeaveRequest;
 use App\Http\Requests\UpdateLeaveRequest;
 use App\Models\Leave;
+use Illuminate\Http\Request;
 
 class LeaveController extends Controller
 {
@@ -36,7 +37,7 @@ class LeaveController extends Controller
         $data = $request->validated();
         $data['status'] = array_search(StatusEnum::PENDING, StatusEnum::statuses);
         $leave = $this->leaveService->createLeave($data);
-        return back()->with('success', 'Leave apply successfully');
+        return back()->with('success', 'added')->withInput();
     }
 
 
@@ -57,19 +58,20 @@ class LeaveController extends Controller
     public function update(UpdateLeaveRequest $request, Leave $leave)
     {
         $leave->update($request->validated());
-        return redirect()->route('leaves.index')->with('success', 'Leave updated successfully');
+        return back()->with('success', 'update')->withInput();
     }
 
     public function destroy(Leave $leave)
     {
         $leave->delete();
-        return redirect()->route('leaves.index')->with('success', 'Leave deleted successfully');
+        return back()->with('success', 'delete')->withInput();
     }
 
     public function updateLeaveStatus(Request $request)
     {
         $leave = Leave::find($request->id);
         $leave->status = $request->status;
+        $leave->comment = $request->comment;
         $leave->save();
         $data = [
             'email' => 'recipient@example.com',
@@ -77,6 +79,6 @@ class LeaveController extends Controller
         ];
         
         event(new LeaveNotificationEvent($data));
-        return back()->with('success', 'Leave status updated successfully');
+        return back()->with('success', 'status_update')->withInput();
     }
 }

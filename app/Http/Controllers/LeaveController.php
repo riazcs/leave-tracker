@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\LeaveServiceInterface;
 use App\Enums\StatusEnum;
+use App\Events\LeaveNotificationEvent;
 use App\Http\Requests\StoreLeaveRequest;
 use App\Http\Requests\UpdateLeaveRequest;
 use App\Models\Leave;
@@ -65,17 +66,17 @@ class LeaveController extends Controller
         return redirect()->route('leaves.index')->with('success', 'Leave deleted successfully');
     }
 
-    public function updateLeaveStatus(Leave $leave, string $status)
+    public function updateLeaveStatus(Request $request)
     {
-        $statusCode = array_search($status, StatusEnum::statuses);
-
-        if ($statusCode === null) {
-            return false;
-        }
-
-        $leave->status = $statusCode;
+        $leave = Leave::find($request->id);
+        $leave->status = $request->status;
         $leave->save();
-
-        return true;
+        $data = [
+            'email' => 'recipient@example.com',
+            'message' => 'Your notification message here.'
+        ];
+        
+        event(new LeaveNotificationEvent($data));
+        return back()->with('success', 'Leave status updated successfully');
     }
 }

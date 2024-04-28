@@ -81,8 +81,9 @@
                                     @csrf
                                     <div class="mb-3">
                                         <label class="form-label" for="add-user-contact"> Select Status</label>
+                                        <input name="id" value="{{$leave->id }}" type="hidden" />
                                         <input name="user_id" value="{{$leave->user->id }}" type="hidden" />
-                                        <select class="form-control" class="form-select" name="type">
+                                        <select class="form-control" class="form-select" name="status">
                                             <option value="" selected disabled> --Select--</option>
                                             @foreach(App\Enums\StatusEnum::statuses as $key=>$status)
                                             <option value="{{ $key }}">{{$status}}</option>

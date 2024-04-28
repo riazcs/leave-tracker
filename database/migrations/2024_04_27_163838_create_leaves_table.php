@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->integer('type')->comment('leave type as sick leave');
             $table->text('reason');
+            $table->text('comment')->nullable();
             $table->timestamp('start_date');
             $table->timestamp('end_date');
             $table->integer('status');
